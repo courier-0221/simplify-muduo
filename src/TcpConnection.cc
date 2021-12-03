@@ -16,21 +16,18 @@ TcpConnection::~TcpConnection()
 void TcpConnection::handleRead()
 {
     int sockfd = _pSocketChannel->getfd();
-    int readlength;
-    char line[MAX_LINE];
+    int savedErrno = 0;
+    
     if (sockfd < 0)
     {
         cout << "EPOLLIN sockfd < 0 error " << endl;
         return;
     }
-    bzero(line, MAX_LINE);
-    if ((readlength = read(sockfd, line, MAX_LINE)) < 0)
+    
+    ssize_t readlength = _inBuf.readFd(sockfd, &savedErrno);
+    if (readlength > 0)
     {
-        if (errno == ECONNRESET)
-        {
-            cout << "ECONNREST closed socket fd:" << sockfd << endl;
-            handleClose();
-        }
+        _pUser->onMessage(this, &_inBuf);
     }
     else if (readlength == 0)
     {
@@ -39,9 +36,11 @@ void TcpConnection::handleRead()
     }
     else
     {
-        string linestr(line, readlength);
-        _inBuf.append(linestr);
-        if (__cpp_user_defined_literals) _pUser->onMessage(this, &_inBuf);
+        if (savedErrno == ECONNRESET)
+        {
+            cout << "ECONNREST closed socket fd:" << sockfd << endl;
+            handleClose();
+        }
     }
 }
 
