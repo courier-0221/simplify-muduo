@@ -28,10 +28,10 @@ public:
 class IMuduoUser
 {
 public:
-    virtual void onConnection(TcpConnection* pCon) = 0;
-    virtual void onMessage(TcpConnection* pCon, Buffer* pBuf) = 0;
-    virtual void onWriteComplate(TcpConnection* pCon) = 0;
-    virtual void onClose(TcpConnection* pCon) = 0;
+    virtual void onConnection(TcpConnectionPtr conn) = 0;
+    virtual void onMessage(TcpConnectionPtr conn, Buffer* pBuf) = 0;
+    virtual void onWriteComplate(TcpConnectionPtr conn) = 0;
+    virtual void onClose(TcpConnectionPtr conn) = 0;
 };
 
 #endif

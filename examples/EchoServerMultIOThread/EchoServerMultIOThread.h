@@ -18,10 +18,10 @@ public:
     EchoServerMultIOThread(EventLoop* pLoop, NetAddress addr, int threadNum);
     ~EchoServerMultIOThread();
     void start();
-    virtual void onConnection(TcpConnection* pCon);
-    virtual void onMessage(TcpConnection* pCon, Buffer* pBuf);  //从buf中读 然后交给多计算线程处理
-    virtual void onWriteComplate(TcpConnection* pCon);  //分配给多个线程任务
-    virtual void onClose(TcpConnection* pCon);
+    virtual void onConnection(TcpConnectionPtr conn);
+    virtual void onMessage(TcpConnectionPtr conn, Buffer* pBuf);  //从buf中读 然后交给多计算线程处理
+    virtual void onWriteComplate(TcpConnectionPtr conn);  //分配给多个线程任务
+    virtual void onClose(TcpConnectionPtr conn);
 
     //回显方法 配合多计算线程调用sendInLoop方法发送
     void echo(const string& str, void* param);

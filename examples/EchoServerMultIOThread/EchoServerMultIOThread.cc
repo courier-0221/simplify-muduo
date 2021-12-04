@@ -17,26 +17,26 @@ void EchoServerMultIOThread::start()
     //_threadpool.start(3); //计算线程池
 }
 
-void EchoServerMultIOThread::onConnection(TcpConnection* pCon)
+void EchoServerMultIOThread::onConnection(TcpConnectionPtr conn)
 {
     cout << "EchoServerMultIOThread::onConnection tid = " << CurrentThread::tid() << endl;
 }
 
-void EchoServerMultIOThread::onMessage(TcpConnection* pCon, Buffer* pBuf)
+void EchoServerMultIOThread::onMessage(TcpConnectionPtr conn, Buffer* pBuf)
 {
     string msg(pBuf->retrieveAllAsString());
     cout << "EchoServerMultIOThread::onMessage tid = " << CurrentThread::tid() << " recv " << msg.size() << " bytes" 
         << " data " << msg << endl;
-    pCon->send(msg + "\n");
+    conn->send(msg + "\n");
     //_threadpool.addTask(std::bind(&EchoServerMultIOThread::echo, this, msg, pCon));
 }
 
-void EchoServerMultIOThread::onWriteComplate(TcpConnection* pCon)
+void EchoServerMultIOThread::onWriteComplate(TcpConnectionPtr conn)
 {
     cout << "EchoServerMultIOThread::onWriteComplate tid = " << CurrentThread::tid() << endl;
 }
 
-void EchoServerMultIOThread::onClose(TcpConnection* pCon)
+void EchoServerMultIOThread::onClose(TcpConnectionPtr conn)
 {
     cout << "EchoServerMultIOThread::onClose tid = " << CurrentThread::tid() << endl;
 }

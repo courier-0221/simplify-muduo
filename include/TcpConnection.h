@@ -19,7 +19,6 @@
 #include <memory>
 using namespace std;
 
-typedef shared_ptr<TcpConnection> TcpConnectionPtr;
 typedef function<void (TcpConnectionPtr)> CloseCallbackForUpLayer;
 
 //一个TcpConnection和一个channel绑定
@@ -35,7 +34,7 @@ public:
     int getFd() {return _sockfd;}
 
     void onWriteComplateCB();   //调用用户设置的写完成cb
-    void onMessageCB(const string& message, void* param); //调用用户设置的发送用户数据cb
+    void onMessageCB(const string& message); //调用用户设置的发送用户数据cb
 
     virtual void handleRead();
     virtual void handleWrite();

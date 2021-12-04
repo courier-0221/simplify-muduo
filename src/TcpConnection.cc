@@ -27,7 +27,7 @@ void TcpConnection::handleRead()
     ssize_t readlength = _inBuf.readFd(sockfd, &savedErrno);
     if (readlength > 0)
     {
-        _pUser->onMessage(this, &_inBuf);
+        _pUser->onMessage(shared_from_this(), &_inBuf);
     }
     else if (readlength == 0)
     {
@@ -72,9 +72,9 @@ void TcpConnection::handleClose()
     //设置事件监听类型为0，该fd已经断开连接，关闭该sockfd在epoll中监听的所有事件
     _pSocketChannel->disableAll();
     //调用用户设置的连接断开API
-    if (_pUser) _pUser->onClose(this);
-    //调用TcpServer或者TcpClient的断开连接回调，用来做相应清除
     TcpConnectionPtr guardThis(shared_from_this());
+    if (_pUser) _pUser->onClose(guardThis);
+    //调用TcpServer或者TcpClient的断开连接回调，用来做相应清除
     if (_closeCallback) _closeCallback(guardThis);
 }
 
@@ -87,7 +87,7 @@ void TcpConnection::send(const string& message)
     }
     else
     {
-        _pLoop->runInLoop(std::bind(&TcpConnection::onMessageCB, this, message, this)); //异步发送
+        _pLoop->runInLoop(std::bind(&TcpConnection::onMessageCB, this, message)); //异步发送
     }
 }
 
@@ -119,7 +119,7 @@ void TcpConnection::sendInLoop(const string& message)
 
 void TcpConnection::connectEstablished()
 {
-    if (_pUser) _pUser->onConnection(this);
+    if (_pUser) _pUser->onConnection(shared_from_this());
 }
 
 void TcpConnection::setUser(IMuduoUser* user)
@@ -129,10 +129,10 @@ void TcpConnection::setUser(IMuduoUser* user)
 
 void TcpConnection::onWriteComplateCB()
 {
-    if (_pUser) _pUser->onWriteComplate(this);
+    if (_pUser) _pUser->onWriteComplate(shared_from_this());
 }
 
-void TcpConnection::onMessageCB(const string& message, void* param)
+void TcpConnection::onMessageCB(const string& message)
 {
     sendInLoop(message);
     //send(message);    两者的区别为前者不需要管是不是在loop线程即可发送数据，

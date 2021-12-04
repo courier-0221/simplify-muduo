@@ -17,10 +17,10 @@ public:
     EchoServerSingleCalcThread(EventLoop* pLoop, NetAddress addr);
     ~EchoServerSingleCalcThread();
     void start();
-    virtual void onConnection(TcpConnection* pCon);
-    virtual void onMessage(TcpConnection* pCon, Buffer* pBuf);
-    virtual void onWriteComplate(TcpConnection* pCon);
-    virtual void onClose(TcpConnection* pCon);
+    virtual void onConnection(TcpConnectionPtr conn);
+    virtual void onMessage(TcpConnectionPtr conn, Buffer* pBuf);
+    virtual void onWriteComplate(TcpConnectionPtr conn);
+    virtual void onClose(TcpConnectionPtr conn);
 private:
     EventLoop* _pLoop;
     TcpServer _pServer;

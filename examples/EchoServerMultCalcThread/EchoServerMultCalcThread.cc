@@ -16,24 +16,24 @@ void EchoServerMultCalcThread::start()
     _threadpool.start(3);
 }
 
-void EchoServerMultCalcThread::onConnection(TcpConnection* pCon)
+void EchoServerMultCalcThread::onConnection(TcpConnectionPtr conn)
 {
     cout << "EchoServerMultCalcThread::onConnection" << endl;
 }
 
-void EchoServerMultCalcThread::onMessage(TcpConnection* pCon, Buffer* pBuf)
+void EchoServerMultCalcThread::onMessage(TcpConnectionPtr conn, Buffer* pBuf)
 {
     string msg(pBuf->retrieveAllAsString());
     cout << "EchoServerMultCalcThread::onMessage" << " recv " << msg.size() << " bytes " << endl;
-    _threadpool.addTask(std::bind(&EchoServerMultCalcThread::echo, this, msg, pCon));
+    _threadpool.addTask(std::bind(&EchoServerMultCalcThread::echo, this, msg, conn.get()));
 }
 
-void EchoServerMultCalcThread::onWriteComplate(TcpConnection* pCon)
+void EchoServerMultCalcThread::onWriteComplate(TcpConnectionPtr conn)
 {
     cout << "EchoServerMultCalcThread::onWriteComplate" << endl;
 }
 
-void EchoServerMultCalcThread::onClose(TcpConnection* pCon)
+void EchoServerMultCalcThread::onClose(TcpConnectionPtr conn)
 {
     cout << "EchoServerMultCalcThread::onClose" << endl;
 }
@@ -42,6 +42,6 @@ void EchoServerMultCalcThread::onClose(TcpConnection* pCon)
 void EchoServerMultCalcThread::echo(const string& str, void* param)
 {
     cout << "EchoServerMultCalcThread::echo SEND" << " tid = " << CurrentThread::tid() << endl;
-    TcpConnection *pTcpCon = static_cast<TcpConnection*>(param);
+    TcpConnection* pTcpCon = static_cast<TcpConnection*>(param);
     pTcpCon->send(str + "\n");
 }

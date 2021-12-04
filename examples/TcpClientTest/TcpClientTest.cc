@@ -21,24 +21,24 @@ class TestClient : public IMuduoUser, IChannelCallback
 		_client.connect();
 	}
 
-	virtual void onConnection(TcpConnection* pCon)
+	virtual void onConnection(TcpConnectionPtr conn)
 	{
 		cout << "TestClient::onConnection" << endl;
 	}
 
-    virtual void onMessage(TcpConnection* pCon, Buffer* pBuf)
+    virtual void onMessage(TcpConnectionPtr conn, Buffer* pBuf)
 	{
 		string msg(pBuf->retrieveAllAsString());
 		cout << "TestClient::onMessage" << "recv tid = " << CurrentThread::tid() 
 				<< " recvSize: " << msg.size() << " bytes " << " recvData: " << msg.c_str() << endl;
 	}
 
-    virtual void onWriteComplate(TcpConnection* pCon)
+    virtual void onWriteComplate(TcpConnectionPtr conn)
 	{
 		cout << "TestClient::onWriteComplate" << endl;
 	}
 
-    virtual void onClose(TcpConnection* pCon) {cout << "TestClient::onClose" << endl;}
+    virtual void onClose(TcpConnectionPtr conn) {cout << "TestClient::onClose" << endl;}
 
 	// 标准输入缓冲区中有数据的时候，回调该函数
 	virtual void handleRead()

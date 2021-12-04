@@ -15,25 +15,25 @@ void EchoServerSingleCalcThread::start()
     _pServer.start();
 }
 
-void EchoServerSingleCalcThread::onConnection(TcpConnection* pCon)
+void EchoServerSingleCalcThread::onConnection(TcpConnectionPtr conn)
 {
     cout << "EchoServerSingleCalcThread::onConnection" << endl;
 }
 
-void EchoServerSingleCalcThread::onMessage(TcpConnection* pCon, Buffer* pBuf)
+void EchoServerSingleCalcThread::onMessage(TcpConnectionPtr conn, Buffer* pBuf)
 {
     string msg(pBuf->retrieveAllAsString());
     cout << "EchoServerSingleCalcThread::onMessage" << " recv " << msg.size() << " bytes " 
         << "SEND tid = " << CurrentThread::tid() << endl;
-    pCon->send(msg + "\n");
+    conn->send(msg + "\n");
 }
 
-void EchoServerSingleCalcThread::onWriteComplate(TcpConnection* pCon)
+void EchoServerSingleCalcThread::onWriteComplate(TcpConnectionPtr conn)
 {
     cout << "EchoServerSingleCalcThread::onWriteComplate" << endl;
 }
 
-void EchoServerSingleCalcThread::onClose(TcpConnection* pCon)
+void EchoServerSingleCalcThread::onClose(TcpConnectionPtr conn)
 {
     cout << "EchoServerSingleCalcThread::onClose" << endl;
 }

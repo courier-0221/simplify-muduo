@@ -48,5 +48,6 @@ class copyable
 };
 
 typedef std::function<void()> TimerCallback;
+typedef shared_ptr<TcpConnection> TcpConnectionPtr;
 
 #endif
