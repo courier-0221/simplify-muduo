@@ -6,7 +6,7 @@
 
 代码实现为2000行左右，实现了muduo中主要功能，没有使用boost库，支持5，8，9，11方式。
 
-![](C:\Users\Administrator\Desktop\1365581789_3309.PNG)
+![](./img/网络模型.PNG)
 
 目录格式：
 
